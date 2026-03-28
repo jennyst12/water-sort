@@ -232,6 +232,7 @@
   // MAIN APP
   // ---------------------------------------------------------------------------
   function App() {
+    const [theme,      setTheme]      = useState('light');
     const [levelIdx,   setLevelIdx]   = useState(1);
     const [tubes,      setTubes]      = useState([]);
     const [selected,   setSelected]   = useState(null);
@@ -253,6 +254,31 @@
     }, []);
 
     useEffect(() => { startGame(1); }, []);
+
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const urlTheme = params.get('theme');
+      if (urlTheme === 'dark' || urlTheme === 'light') {
+        setTheme(urlTheme);
+      } else {
+        setTheme('light');
+      }
+    }, []);
+
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      params.set('theme', theme);
+      const newUrl = window.location.pathname + '?' + params.toString();
+      window.history.replaceState({}, '', newUrl);
+
+      if (theme === 'dark') {
+        document.body.style.background = 'linear-gradient(135deg, #0f0c29 0%, #1a1a4e 50%, #24243e 100%)';
+        document.body.style.color = '#fff';
+      } else {
+        document.body.style.background = 'linear-gradient(135deg, #f5f7ff 0%, #dfe9f3 50%, #cdd8e7 100%)';
+        document.body.style.color = '#121620';
+      }
+    }, [theme]);
 
     function handleTubeClick(idx) {
       if (won) return;
@@ -312,6 +338,9 @@
           alignItems: "center",
           justifyContent: "flex-start",
           padding: "28px 16px 40px",
+          color: theme === 'dark' ? '#fff' : '#1c2b4b',
+          background: theme === 'dark' ? 'rgba(7,7,25,0.36)' : 'rgba(255,255,255,0.72)',
+          backdropFilter: theme === 'light' ? 'blur(4px)' : 'none',
         },
       },
 
@@ -320,7 +349,7 @@
         "div",
         { style: { textAlign: "center", marginBottom: 22 } },
         React.createElement("div", {
-          style: { fontSize: 11, letterSpacing: "0.38em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 4 },
+          style: { fontSize: 11, letterSpacing: "0.38em", color: theme === 'dark' ? "rgba(255,255,255,0.4)" : "rgba(35,47,82,0.65)", textTransform: "uppercase", marginBottom: 4 },
         }, "Liquid Puzzle"),
         React.createElement("div", {
           style: { fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", textShadow: "0 0 40px rgba(180,160,255,0.5)" },
@@ -404,6 +433,10 @@
         React.createElement(Btn, { onClick: handleUndo, disabled: history.length === 0 }, "↩ Undo"),
         React.createElement(Btn, { onClick: handleAddTube }, "+ Extra tube  (+3 moves)"),
         React.createElement(Btn, { onClick: () => startGame(levelIdx) }, "↺ Restart"),
+        React.createElement(Btn, {
+          onClick: () => setTheme((t) => (t === 'light' ? 'dark' : 'light')),
+          accent: theme === 'dark',
+        }, theme === 'light' ? '🌙 Dark mode' : '☀️ Light mode'),
       ),
 
       // ── Win overlay ──
