@@ -5,62 +5,108 @@
 (function () {
   "use strict";
 
-  const { useState, useEffect, useCallback, useRef } = React;
+  const { useState, useEffect, useCallback } = React;
 
   // ---------------------------------------------------------------------------
   // COLOUR PALETTE
-  // Each colour has a solid hex, a pattern type, and a pattern colour.
-  // Colours are chosen for maximum contrast: WCAG relative-luminance differences
-  // are checked in comments. Patterns further distinguish similar hues.
   // ---------------------------------------------------------------------------
   const COLORS = [
-    // 1 – strong red
-    { id: 1,  base: "#D93025", pattern: "none",             patCol: null,      name: "red"      },
-    // 2 – deep teal (dark enough to contrast well with mint)
-    { id: 2,  base: "#007A6E", pattern: "h-stripes",        patCol: "#005a52", name: "teal"     },
-    // 3 – golden yellow (lightened from amber to stand apart from orange)
-    { id: 3,  base: "#F5C400", pattern: "dots",             patCol: "#c49800", name: "yellow"   },
-    // 4 – light mint — uses diagonal stripes to separate from teal
-    { id: 4,  base: "#52C99A", pattern: "diag-stripes",     patCol: "#3aab80", name: "mint"     },
-    // 5 – mid purple
-    { id: 5,  base: "#7C4DFF", pattern: "none",             patCol: null,      name: "purple"   },
-    // 6 – hot pink (distinct hue from red and purple)
-    { id: 6,  base: "#E91E8C", pattern: "dots",             patCol: "#b8166e", name: "pink"     },
-    // 7 – bright sky blue (lighter than teal, dots to separate from purple)
-    { id: 7,  base: "#2196F3", pattern: "v-stripes",        patCol: "#1565c0", name: "blue"     },
-    // 8 – deep orange (distinct from yellow via hue + stripes)
-    { id: 8,  base: "#F4511E", pattern: "diag-stripes",     patCol: "#bf3c12", name: "orange"   },
-    // 9 – dark navy (new Master colour)
-    { id: 9,  base: "#1A237E", pattern: "h-stripes",        patCol: "#0d1554", name: "navy"     },
-    // 10 – lime green (new Master colour, far from mint/teal)
-    { id: 10, base: "#76BC21", pattern: "v-stripes",        patCol: "#558c16", name: "lime"     },
+    { id: 1,  base: "#D93025", pattern: "none",         patCol: null,      name: "red"      },
+    { id: 2,  base: "#007A6E", pattern: "h-stripes",    patCol: "#005a52", name: "teal"     },
+    { id: 3,  base: "#F5C400", pattern: "dots",         patCol: "#c49800", name: "yellow"   },
+    { id: 4,  base: "#52C99A", pattern: "diag-stripes", patCol: "#3aab80", name: "mint"     },
+    { id: 5,  base: "#7C4DFF", pattern: "none",         patCol: null,      name: "purple"   },
+    { id: 6,  base: "#E91E8C", pattern: "dots",         patCol: "#b8166e", name: "pink"     },
+    { id: 7,  base: "#2196F3", pattern: "v-stripes",    patCol: "#1565c0", name: "blue"     },
+    { id: 8,  base: "#F4511E", pattern: "diag-stripes", patCol: "#bf3c12", name: "orange"   },
+    { id: 9,  base: "#1A237E", pattern: "h-stripes",    patCol: "#0d1554", name: "navy"     },
+    { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"     },
+    { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
+    { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
   ];
 
-  // SVG data-URIs for pattern overlays — rendered as a background-image on top of base colour
   function patternCSS(type, col) {
     if (!type || type === "none" || !col) return "";
-    const enc = (s) => encodeURIComponent(s);
-    const opacity = "0.35";
+    const enc = encodeURIComponent;
+    const op = "0.35";
     switch (type) {
       case "dots":
-        return `url("data:image/svg+xml,${enc(
-          `<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='2' fill='${col}' fill-opacity='${opacity}'/></svg>`
-        )}")`;
+        return `url("data:image/svg+xml,${enc(`<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10'><circle cx='5' cy='5' r='2' fill='${col}' fill-opacity='${op}'/></svg>`)}")`;
       case "h-stripes":
-        return `url("data:image/svg+xml,${enc(
-          `<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect x='0' y='3' width='8' height='2' fill='${col}' fill-opacity='${opacity}'/></svg>`
-        )}")`;
+        return `url("data:image/svg+xml,${enc(`<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect x='0' y='3' width='8' height='2' fill='${col}' fill-opacity='${op}'/></svg>`)}")`;
       case "v-stripes":
-        return `url("data:image/svg+xml,${enc(
-          `<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect x='3' y='0' width='2' height='8' fill='${col}' fill-opacity='${opacity}'/></svg>`
-        )}")`;
+        return `url("data:image/svg+xml,${enc(`<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><rect x='3' y='0' width='2' height='8' fill='${col}' fill-opacity='${op}'/></svg>`)}")`;
       case "diag-stripes":
-        return `url("data:image/svg+xml,${enc(
-          `<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><line x1='0' y1='8' x2='8' y2='0' stroke='${col}' stroke-width='2' stroke-opacity='${opacity}'/></svg>`
-        )}")`;
-      default:
-        return "";
+        return `url("data:image/svg+xml,${enc(`<svg xmlns='http://www.w3.org/2000/svg' width='8' height='8'><line x1='0' y1='8' x2='8' y2='0' stroke='${col}' stroke-width='2' stroke-opacity='${op}'/></svg>`)}")`;
+      default: return "";
     }
+  }
+
+  // ---------------------------------------------------------------------------
+  // THEME TOKENS — all colours derived from isDark flag.
+  // Every style in every component reads from here, never hardcoded.
+  // ---------------------------------------------------------------------------
+  function tok(isDark) {
+    return {
+      pageBg:              isDark ? "linear-gradient(135deg,#0f0c29 0%,#1a1a4e 50%,#24243e 100%)"
+                                  : "linear-gradient(135deg,#f5f7ff 0%,#dfe9f3 50%,#cdd8e7 100%)",
+      panelBg:             isDark ? "rgba(7,7,25,0.36)"              : "rgba(255,255,255,0.82)",
+      textPrimary:         isDark ? "#ffffff"                        : "#0f1c3f",
+      textSecondary:       isDark ? "rgba(255,255,255,0.45)"         : "rgba(15,28,63,0.6)",
+      textMuted:           isDark ? "rgba(255,255,255,0.25)"         : "rgba(15,28,63,0.38)",
+      accent:              isDark ? "#C9B1FF"                        : "#5b3fd4",
+      divider:             isDark ? "rgba(255,255,255,0.10)"         : "rgba(15,28,63,0.12)",
+      btnBg:               isDark ? "rgba(255,255,255,0.08)"         : "rgba(15,28,63,0.07)",
+      btnBorder:           isDark ? "rgba(255,255,255,0.20)"         : "rgba(15,28,63,0.25)",
+      btnText:             isDark ? "#ffffff"                        : "#0f1c3f",
+      btnDisabledBg:       isDark ? "rgba(255,255,255,0.03)"         : "rgba(15,28,63,0.03)",
+      btnDisabledText:     isDark ? "rgba(255,255,255,0.20)"         : "rgba(15,28,63,0.25)",
+      levelActiveBg:       isDark ? "rgba(201,177,255,0.18)"         : "rgba(91,63,212,0.12)",
+      levelActiveBorder:   isDark ? "#C9B1FF"                        : "#5b3fd4",
+      levelActiveText:     isDark ? "#C9B1FF"                        : "#5b3fd4",
+      levelIdleBorder:     isDark ? "rgba(255,255,255,0.15)"         : "rgba(15,28,63,0.20)",
+      levelIdleText:       isDark ? "rgba(255,255,255,0.55)"         : "rgba(15,28,63,0.60)",
+      tubeBorder:          isDark ? "rgba(255,255,255,0.22)"         : "rgba(15,28,63,0.30)",
+      tubeSelectedBorder:  isDark ? "#ffffff"                        : "#0f1c3f",
+      tubeExtraBorder:     isDark ? "rgba(255,255,255,0.40)"         : "rgba(15,28,63,0.45)",
+      tubeSelectedGlow:    isDark ? "0 0 22px rgba(255,255,255,0.45),inset 0 0 10px rgba(255,255,255,0.06)"
+                                  : "0 0 16px rgba(15,28,63,0.25),inset 0 0 8px rgba(15,28,63,0.06)",
+      tubeInnerShadow:     isDark ? "inset 0 0 10px rgba(0,0,0,0.4)": "inset 0 0 10px rgba(0,0,0,0.10)",
+      tubeBg:              isDark ? "rgba(255,255,255,0.05)"         : "rgba(255,255,255,0.60)",
+      tubeRim:             isDark ? "rgba(255,255,255,0.18)"         : "rgba(15,28,63,0.25)",
+      tubeRimSelected:     isDark ? "rgba(255,255,255,0.65)"         : "rgba(15,28,63,0.70)",
+      // Win overlay always dark so white text works regardless of page theme
+      overlayBg:           "rgba(10,8,30,0.92)",
+      overlayText:         "#ffffff",
+      overlayMuted:        "rgba(255,255,255,0.58)",
+    };
+  }
+
+  // ---------------------------------------------------------------------------
+  // STATS  (localStorage)
+  // ---------------------------------------------------------------------------
+  const STATS_KEY = "waterSortStats_v1";
+
+  function loadStats() {
+    try { const r = localStorage.getItem(STATS_KEY); return r ? JSON.parse(r) : {}; }
+    catch { return {}; }
+  }
+
+  function saveStats(s) {
+    try { localStorage.setItem(STATS_KEY, JSON.stringify(s)); } catch {}
+  }
+
+  function recordWin(stats, label, moves) {
+    const s = stats[label] || { played: 0, won: 0, totalMoves: 0, bestMoves: null };
+    return {
+      ...stats,
+      [label]: {
+        played:     s.played + 1,
+        won:        s.won + 1,
+        totalMoves: s.totalMoves + moves,
+        bestMoves:  s.bestMoves === null ? moves : Math.min(s.bestMoves, moves),
+      },
+    };
   }
 
   // ---------------------------------------------------------------------------
@@ -69,28 +115,22 @@
   const TUBE_CAPACITY = 4;
 
   function generatePuzzle(numColors) {
-    const allSegments = [];
+    const all = [];
     for (let c = 0; c < numColors; c++)
-      for (let i = 0; i < TUBE_CAPACITY; i++) allSegments.push(c + 1);
-
-    // Fisher-Yates shuffle
-    for (let i = allSegments.length - 1; i > 0; i--) {
+      for (let i = 0; i < TUBE_CAPACITY; i++) all.push(c + 1);
+    for (let i = all.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
-      [allSegments[i], allSegments[j]] = [allSegments[j], allSegments[i]];
+      [all[i], all[j]] = [all[j], all[i]];
     }
-
     const tubes = [];
     for (let i = 0; i < numColors; i++)
-      tubes.push(allSegments.slice(i * TUBE_CAPACITY, (i + 1) * TUBE_CAPACITY));
-
-    tubes.push([]); // one empty tube to start
+      tubes.push(all.slice(i * TUBE_CAPACITY, (i + 1) * TUBE_CAPACITY));
+    tubes.push([]);
     return tubes;
   }
 
   function isSolved(tubes) {
-    return tubes.every(
-      (t) => t.length === 0 || (t.length === TUBE_CAPACITY && t.every((c) => c === t[0]))
-    );
+    return tubes.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && t.every(c => c === t[0])));
   }
 
   function canPour(from, to) {
@@ -101,130 +141,184 @@
   }
 
   function pour(tubes, fromIdx, toIdx) {
-    const next = tubes.map((t) => [...t]);
-    const from = next[fromIdx];
-    const to   = next[toIdx];
-    const col  = from[from.length - 1];
+    const next = tubes.map(t => [...t]);
+    const from = next[fromIdx], to = next[toIdx];
+    const col = from[from.length - 1];
     while (from.length > 0 && from[from.length - 1] === col && to.length < TUBE_CAPACITY)
       to.push(from.pop());
     return next;
   }
 
   // ---------------------------------------------------------------------------
+  // LEVELS
+  // ---------------------------------------------------------------------------
+  const LEVELS = [
+    { label: "Beginner",  colors: 2  },
+    { label: "Easy",      colors: 3  },
+    { label: "Medium",    colors: 5  },
+    { label: "Hard",      colors: 7  },
+    { label: "Expert",    colors: 8  },
+    { label: "Master",    colors: 10 },
+    { label: "Nightmare", colors: 12 },
+  ];
+
+  // ---------------------------------------------------------------------------
   // TUBE COMPONENT
   // ---------------------------------------------------------------------------
-  function Tube({ contents, isSelected, onClick, isExtra }) {
-    // Nulls at top (empty air), colours at bottom — stable bottom-up indices
+  function Tube({ contents, isSelected, isExtra, onClick, t }) {
     const filled   = [...contents].reverse();
     const segments = Array(TUBE_CAPACITY - filled.length).fill(null).concat(filled);
 
-    return React.createElement(
-      "div",
-      {
-        onClick,
+    return React.createElement("div", {
+      onClick,
+      style: {
+        display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer",
+        transform: isSelected ? "translateY(-16px) scale(1.06)" : "translateY(0) scale(1)",
+        transition: "transform 0.18s cubic-bezier(.34,1.56,.64,1)",
+      },
+    },
+      React.createElement("div", {
         style: {
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          cursor: "pointer",
-          transform: isSelected ? "translateY(-16px) scale(1.06)" : "translateY(0) scale(1)",
-          transition: "transform 0.18s cubic-bezier(.34,1.56,.64,1)",
+          width: 52, height: 160, borderRadius: "0 0 28px 28px",
+          border: isSelected ? `2.5px solid ${t.tubeSelectedBorder}`
+                : isExtra    ? `2.5px dashed ${t.tubeExtraBorder}`
+                :               `2.5px solid ${t.tubeBorder}`,
+          boxShadow: isSelected ? t.tubeSelectedGlow : t.tubeInnerShadow,
+          background: t.tubeBg,
+          overflow: "hidden", display: "flex", flexDirection: "column", position: "relative",
         },
       },
-      // Tube body
-      React.createElement(
-        "div",
-        {
-          style: {
-            width: 52,
-            height: 160,
-            borderRadius: "0 0 28px 28px",
-            border: isSelected
-              ? "2.5px solid #fff"
-              : isExtra
-              ? "2.5px dashed rgba(255,255,255,0.35)"
-              : "2.5px solid rgba(255,255,255,0.22)",
-            boxShadow: isSelected
-              ? "0 0 22px rgba(255,255,255,0.45), inset 0 0 10px rgba(255,255,255,0.06)"
-              : "inset 0 0 10px rgba(0,0,0,0.4)",
-            background: "rgba(255,255,255,0.05)",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            position: "relative",
-          },
-        },
         segments.map((colorId, i) => {
-          const col = colorId ? COLORS.find((c) => c.id === colorId) : null;
+          const col = colorId ? COLORS.find(c => c.id === colorId) : null;
           const pat = col ? patternCSS(col.pattern, col.patCol) : "";
           return React.createElement("div", {
             key: `${i}-${colorId ?? "e"}`,
             style: {
               flex: 1,
-              background: col ? col.base : "transparent",
-              // Pattern overlay via background-image layered over base colour
+              background:      col ? col.base : "transparent",
               backgroundImage: pat || undefined,
-              backgroundSize: col ? "10px 10px" : undefined,
-              borderBottom: i < TUBE_CAPACITY - 1 && col
-                ? "1px solid rgba(255,255,255,0.12)"
-                : "none",
-              boxShadow: col ? "inset 0 2px 5px rgba(255,255,255,0.18)" : "none",
+              backgroundSize:  col ? "10px 10px" : undefined,
+              borderBottom:    i < TUBE_CAPACITY - 1 && col ? "1px solid rgba(255,255,255,0.12)" : "none",
+              boxShadow:       col ? "inset 0 2px 5px rgba(255,255,255,0.18)" : "none",
             },
           });
         })
       ),
-      // Tube rim
       React.createElement("div", {
         style: {
-          width: 36,
-          height: 6,
-          borderRadius: "0 0 10px 10px",
-          background: isSelected ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.18)",
-          marginTop: -1,
-          transition: "background 0.18s",
+          width: 36, height: 6, borderRadius: "0 0 10px 10px",
+          background: isSelected ? t.tubeRimSelected : t.tubeRim,
+          marginTop: -1, transition: "background 0.18s",
         },
       })
     );
   }
 
   // ---------------------------------------------------------------------------
-  // LEVELS
+  // BUTTON — theme-aware, with optional overlay variant for the win screen
   // ---------------------------------------------------------------------------
-  const LEVELS = [
-    { label: "Easy",   colors: 3  },
-    { label: "Medium", colors: 5  },
-    { label: "Hard",   colors: 7  },
-    { label: "Expert", colors: 8  },
-    { label: "Master", colors: 10 },
-  ];
+  function Btn({ onClick, disabled, accent, overlay, children, t }) {
+    const bg    = accent   ? "linear-gradient(135deg,#C9B1FF,#85C1E9)"
+                : disabled ? (overlay ? "rgba(255,255,255,0.05)" : t.btnDisabledBg)
+                : overlay  ? "rgba(255,255,255,0.12)"
+                : t.btnBg;
+    const bdr   = accent   ? "none"
+                : overlay  ? "1.5px solid rgba(255,255,255,0.28)"
+                :            `1.5px solid ${t.btnBorder}`;
+    const color = accent   ? "#1a1a4e"
+                : disabled ? (overlay ? "rgba(255,255,255,0.28)" : t.btnDisabledText)
+                : overlay  ? "rgba(255,255,255,0.92)"
+                : t.btnText;
+
+    return React.createElement("button", {
+      onClick, disabled,
+      style: {
+        padding: "10px 20px", borderRadius: 12,
+        border: bdr, background: bg, color,
+        fontSize: 14, fontWeight: 700,
+        cursor: disabled ? "not-allowed" : "pointer",
+        transition: "opacity 0.15s", whiteSpace: "nowrap",
+      },
+    }, children);
+  }
 
   // ---------------------------------------------------------------------------
-  // BUTTON helper
+  // STATS PANEL
   // ---------------------------------------------------------------------------
-  function Btn({ onClick, disabled, accent, children }) {
-    return React.createElement(
-      "button",
-      {
-        onClick,
-        disabled,
+  function StatsPanel({ stats, t, onClose }) {
+    const hasAny = LEVELS.some(l => stats[l.label]?.played > 0);
+
+    return React.createElement("div", {
+      style: {
+        position: "fixed", inset: 0, background: "rgba(10,8,30,0.88)",
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        backdropFilter: "blur(10px)", zIndex: 300, animation: "wsFadeIn 0.3s ease",
+        padding: "20px 16px",
+      },
+    },
+      React.createElement("div", {
         style: {
-          padding: "10px 20px",
-          borderRadius: 12,
-          border: accent ? "none" : "1.5px solid rgba(255,255,255,0.15)",
-          background: accent
-            ? "linear-gradient(135deg, #C9B1FF, #85C1E9)"
-            : disabled
-            ? "rgba(255,255,255,0.03)"
-            : "rgba(255,255,255,0.07)",
-          color: accent ? "#1a1a4e" : disabled ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.8)",
-          fontSize: 14,
-          fontWeight: 700,
-          cursor: disabled ? "not-allowed" : "pointer",
-          transition: "opacity 0.15s",
-          whiteSpace: "nowrap",
+          background: t.panelBg, borderRadius: 20, padding: "28px 24px",
+          maxWidth: 540, width: "100%", maxHeight: "85vh", overflowY: "auto",
+          boxShadow: "0 8px 48px rgba(0,0,0,0.5)", color: t.textPrimary,
         },
       },
-      children
+        React.createElement("div", {
+          style: { fontSize: 22, fontWeight: 800, marginBottom: 4, letterSpacing: "-0.02em" },
+        }, "📊 Statistics"),
+        React.createElement("div", {
+          style: { fontSize: 13, color: t.textSecondary, marginBottom: 20 },
+        }, "Your history across all difficulty levels"),
+
+        !hasAny && React.createElement("div", {
+          style: { color: t.textMuted, fontSize: 14, textAlign: "center", padding: "20px 0" },
+        }, "No games completed yet — start playing!"),
+
+        hasAny && React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 2 } },
+          // Header
+          React.createElement("div", {
+            style: {
+              display: "grid", gridTemplateColumns: "110px 1fr 1fr 1fr 1fr",
+              gap: 8, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
+              textTransform: "uppercase", color: t.textMuted,
+              paddingBottom: 8, borderBottom: `1px solid ${t.divider}`,
+            },
+          },
+            ["Level","Played","Won","Best","Avg"].map((h, i) =>
+              React.createElement("div", {
+                key: h,
+                style: { textAlign: i === 0 ? "left" : "right" },
+              }, h)
+            )
+          ),
+          ...LEVELS.map(l => {
+            const s = stats[l.label];
+            if (!s || s.played === 0) return null;
+            const avg      = s.won > 0 ? Math.round(s.totalMoves / s.won) : "—";
+            const winRate  = Math.round((s.won / s.played) * 100);
+            return React.createElement("div", {
+              key: l.label,
+              style: {
+                display: "grid", gridTemplateColumns: "110px 1fr 1fr 1fr 1fr",
+                gap: 8, fontSize: 14, alignItems: "center",
+                padding: "8px 0", borderBottom: `1px solid ${t.divider}`,
+              },
+            },
+              React.createElement("div", { style: { fontWeight: 700 } }, l.label),
+              React.createElement("div", { style: { textAlign: "right" } }, s.played),
+              React.createElement("div", { style: { textAlign: "right", color: t.accent, fontWeight: 600 } },
+                `${s.won} (${winRate}%)`),
+              React.createElement("div", { style: { textAlign: "right", color: t.accent, fontWeight: 700 } },
+                s.bestMoves ?? "—"),
+              React.createElement("div", { style: { textAlign: "right" } }, avg),
+            );
+          }).filter(Boolean)
+        ),
+
+        React.createElement("div", { style: { marginTop: 24, display: "flex", justifyContent: "center" } },
+          React.createElement(Btn, { onClick: onClose, t }, "Close")
+        )
+      )
     );
   }
 
@@ -232,15 +326,35 @@
   // MAIN APP
   // ---------------------------------------------------------------------------
   function App() {
-    const [theme,      setTheme]      = useState('light');
-    const [levelIdx,   setLevelIdx]   = useState(1);
+    const [theme,      setTheme]      = useState("light");
+    const [levelIdx,   setLevelIdx]   = useState(2);
     const [tubes,      setTubes]      = useState([]);
     const [selected,   setSelected]   = useState(null);
     const [moves,      setMoves]      = useState(0);
     const [history,    setHistory]    = useState([]);
     const [won,        setWon]        = useState(false);
     const [showLevels, setShowLevels] = useState(false);
-    const [extraCount, setExtraCount] = useState(0); // how many bonus tubes added this game
+    const [extraCount, setExtraCount] = useState(0);
+    const [stats,      setStats]      = useState(loadStats);
+    const [showStats,  setShowStats]  = useState(false);
+
+    const t = tok(theme === "dark");
+
+    // Read theme from URL on mount
+    useEffect(() => {
+      const p = new URLSearchParams(window.location.search);
+      const u = p.get("theme");
+      if (u === "dark" || u === "light") setTheme(u);
+    }, []);
+
+    // Sync theme to URL + body
+    useEffect(() => {
+      const p = new URLSearchParams(window.location.search);
+      p.set("theme", theme);
+      window.history.replaceState({}, "", window.location.pathname + "?" + p.toString());
+      document.body.style.background = t.pageBg;
+      document.body.style.color      = t.textPrimary;
+    }, [theme]);
 
     const startGame = useCallback((idx) => {
       setTubes(generatePuzzle(LEVELS[idx].colors));
@@ -253,32 +367,7 @@
       setShowLevels(false);
     }, []);
 
-    useEffect(() => { startGame(1); }, []);
-
-    useEffect(() => {
-      const params = new URLSearchParams(window.location.search);
-      const urlTheme = params.get('theme');
-      if (urlTheme === 'dark' || urlTheme === 'light') {
-        setTheme(urlTheme);
-      } else {
-        setTheme('light');
-      }
-    }, []);
-
-    useEffect(() => {
-      const params = new URLSearchParams(window.location.search);
-      params.set('theme', theme);
-      const newUrl = window.location.pathname + '?' + params.toString();
-      window.history.replaceState({}, '', newUrl);
-
-      if (theme === 'dark') {
-        document.body.style.background = 'linear-gradient(135deg, #0f0c29 0%, #1a1a4e 50%, #24243e 100%)';
-        document.body.style.color = '#fff';
-      } else {
-        document.body.style.background = 'linear-gradient(135deg, #f5f7ff 0%, #dfe9f3 50%, #cdd8e7 100%)';
-        document.body.style.color = '#121620';
-      }
-    }, [theme]);
+    useEffect(() => { startGame(2); }, []);
 
     function handleTubeClick(idx) {
       if (won) return;
@@ -289,12 +378,22 @@
         setSelected(null);
       } else {
         if (canPour(tubes[selected], tubes[idx])) {
-          setHistory((h) => [...h, tubes.map((t) => [...t])]);
+          setHistory(h => [...h, tubes.map(r => [...r])]);
           const next = pour(tubes, selected, idx);
           setTubes(next);
-          setMoves((m) => m + 1);
+          const newMoves = moves + 1;
+          setMoves(newMoves);
           setSelected(null);
-          if (isSolved(next)) setTimeout(() => setWon(true), 320);
+          if (isSolved(next)) {
+            setTimeout(() => {
+              setWon(true);
+              setStats(prev => {
+                const updated = recordWin(prev, LEVELS[levelIdx].label, newMoves);
+                saveStats(updated);
+                return updated;
+              });
+            }, 320);
+          }
         } else {
           setSelected(idx);
         }
@@ -304,171 +403,156 @@
     function handleUndo() {
       if (!history.length) return;
       setTubes(history[history.length - 1]);
-      setHistory((h) => h.slice(0, -1));
-      setMoves((m) => Math.max(0, m - 1));
+      setHistory(h => h.slice(0, -1));
+      setMoves(m => Math.max(0, m - 1));
       setSelected(null);
       setWon(false);
     }
 
     function handleAddTube() {
-      setHistory((h) => [...h, tubes.map((t) => [...t])]);
-      setTubes((ts) => [...ts, []]);
-      setExtraCount((n) => n + 1);
-      setMoves((m) => m + 3); // small penalty
+      setHistory(h => [...h, tubes.map(r => [...r])]);
+      setTubes(ts => [...ts, []]);
+      setExtraCount(n => n + 1);
+      setMoves(m => m + 3);
     }
 
-    // Number of tubes per row — cap at 5 to keep them large enough
-    const numTubes = tubes.length;
-    const perRow   = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
-
-    // Which tube indices are "extra" (added mid-game)?
-    // They're appended at the end, so last extraCount tubes are extras.
+    const numTubes   = tubes.length;
+    const perRow     = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
     const extraStart = tubes.length - extraCount;
+    const curStats   = stats[LEVELS[levelIdx].label];
 
-    // ---------------------------------------------------------------------------
-    // RENDER
-    // ---------------------------------------------------------------------------
-    return React.createElement(
-      "div",
-      {
-        style: {
-          minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          padding: "28px 16px 40px",
-          color: theme === 'dark' ? '#fff' : '#1c2b4b',
-          background: theme === 'dark' ? 'rgba(7,7,25,0.36)' : 'rgba(255,255,255,0.72)',
-          backdropFilter: theme === 'light' ? 'blur(4px)' : 'none',
-        },
+    return React.createElement("div", {
+      style: {
+        minHeight: "100vh", display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "flex-start",
+        padding: "28px 16px 40px",
+        color: t.textPrimary, background: t.panelBg,
+        backdropFilter: theme === "light" ? "blur(4px)" : "none",
       },
+    },
+      React.createElement("style", null,
+        "@keyframes wsFadeIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}"
+      ),
 
-      // ── Title ──
-      React.createElement(
-        "div",
-        { style: { textAlign: "center", marginBottom: 22 } },
+      // Title
+      React.createElement("div", { style: { textAlign: "center", marginBottom: 22 } },
         React.createElement("div", {
-          style: { fontSize: 11, letterSpacing: "0.38em", color: theme === 'dark' ? "rgba(255,255,255,0.4)" : "rgba(35,47,82,0.65)", textTransform: "uppercase", marginBottom: 4 },
+          style: { fontSize: 11, letterSpacing: "0.38em", color: t.textSecondary, textTransform: "uppercase", marginBottom: 4 },
         }, "Liquid Puzzle"),
         React.createElement("div", {
-          style: { fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", textShadow: "0 0 40px rgba(180,160,255,0.5)" },
+          style: { fontSize: 32, fontWeight: 800, letterSpacing: "-0.02em", color: t.textPrimary,
+            textShadow: theme === "dark" ? "0 0 40px rgba(180,160,255,0.5)" : "none" },
         }, "Water Sort")
       ),
 
-      // ── Stats + level picker trigger ──
-      React.createElement(
-        "div",
-        { style: { display: "flex", gap: 20, alignItems: "center", marginBottom: 20 } },
-        React.createElement(
-          "div",
-          { style: { textAlign: "center" } },
-          React.createElement("div", { style: { fontSize: 24, fontWeight: 800, color: "#C9B1FF" } }, moves),
-          React.createElement("div", { style: { fontSize: 10, color: "rgba(255,255,255,0.38)", letterSpacing: "0.12em" } }, "MOVES")
+      // Stats row
+      React.createElement("div", { style: { display: "flex", gap: 16, alignItems: "center", marginBottom: 20 } },
+        React.createElement("div", { style: { textAlign: "center" } },
+          React.createElement("div", { style: { fontSize: 24, fontWeight: 800, color: t.accent } }, moves),
+          React.createElement("div", { style: { fontSize: 10, color: t.textMuted, letterSpacing: "0.12em" } }, "MOVES")
         ),
-        React.createElement("div", { style: { width: 1, height: 28, background: "rgba(255,255,255,0.1)" } }),
-        React.createElement(
-          "div",
-          {
-            onClick: () => setShowLevels((v) => !v),
-            style: {
-              padding: "6px 16px", borderRadius: 20,
-              border: "1.5px solid rgba(255,255,255,0.18)",
-              background: "rgba(255,255,255,0.06)",
-              color: "rgba(255,255,255,0.75)", fontSize: 13, fontWeight: 700, cursor: "pointer",
-            },
-          },
-          LEVELS[levelIdx].label + " ▾"
-        )
-      ),
-
-      // ── Level picker ──
-      showLevels && React.createElement(
-        "div",
-        { style: { display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap", justifyContent: "center" } },
-        LEVELS.map((l, i) =>
-          React.createElement(
-            "div",
-            {
-              key: i,
-              onClick: () => startGame(i),
-              style: {
-                padding: "5px 16px", borderRadius: 16, cursor: "pointer", fontSize: 13, fontWeight: 700,
-                border: `1.5px solid ${i === levelIdx ? "#C9B1FF" : "rgba(255,255,255,0.15)"}`,
-                background: i === levelIdx ? "rgba(201,177,255,0.15)" : "rgba(255,255,255,0.04)",
-                color: i === levelIdx ? "#C9B1FF" : "rgba(255,255,255,0.5)",
-              },
-            },
-            l.label
-          )
-        )
-      ),
-
-      // ── Tubes grid ──
-      React.createElement(
-        "div",
-        {
+        React.createElement("div", { style: { width: 1, height: 28, background: t.divider } }),
+        React.createElement("div", {
+          onClick: () => setShowLevels(v => !v),
           style: {
-            display: "flex", flexWrap: "wrap", gap: "14px 14px",
-            justifyContent: "center",
-            maxWidth: `${perRow * 82}px`,
-            marginBottom: 28,
+            padding: "6px 16px", borderRadius: 20, cursor: "pointer",
+            border: `1.5px solid ${t.btnBorder}`, background: t.btnBg,
+            color: t.btnText, fontSize: 13, fontWeight: 700,
           },
+        }, LEVELS[levelIdx].label + " ▾"),
+        React.createElement("div", { style: { width: 1, height: 28, background: t.divider } }),
+        React.createElement("div", {
+          onClick: () => setShowStats(true),
+          style: {
+            padding: "6px 14px", borderRadius: 20, cursor: "pointer",
+            border: `1.5px solid ${t.btnBorder}`, background: t.btnBg,
+            color: t.btnText, fontSize: 13, fontWeight: 700,
+          },
+        }, "📊 Stats")
+      ),
+
+      // Level picker
+      showLevels && React.createElement("div", {
+        style: { display: "flex", gap: 8, marginBottom: 18, flexWrap: "wrap", justifyContent: "center" },
+      },
+        LEVELS.map((l, i) =>
+          React.createElement("div", {
+            key: i, onClick: () => startGame(i),
+            style: {
+              padding: "5px 16px", borderRadius: 16, cursor: "pointer", fontSize: 13, fontWeight: 700,
+              border: `1.5px solid ${i === levelIdx ? t.levelActiveBorder : t.levelIdleBorder}`,
+              background: i === levelIdx ? t.levelActiveBg : "transparent",
+              color: i === levelIdx ? t.levelActiveText : t.levelIdleText,
+            },
+          }, l.label)
+        )
+      ),
+
+      // Tubes grid
+      React.createElement("div", {
+        style: {
+          display: "flex", flexWrap: "wrap", gap: "14px 14px",
+          justifyContent: "center", maxWidth: `${perRow * 82}px`, marginBottom: 28,
         },
+      },
         tubes.map((tube, i) =>
           React.createElement(Tube, {
-            key: i,
-            contents: tube,
+            key: i, contents: tube,
             isSelected: selected === i,
             isExtra: i >= extraStart,
             onClick: () => handleTubeClick(i),
+            t,
           })
         )
       ),
 
-      // ── Controls ──
-      React.createElement(
-        "div",
-        { style: { display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" } },
-        React.createElement(Btn, { onClick: handleUndo, disabled: history.length === 0 }, "↩ Undo"),
-        React.createElement(Btn, { onClick: handleAddTube }, "+ Extra tube  (+3 moves)"),
-        React.createElement(Btn, { onClick: () => startGame(levelIdx) }, "↺ Restart"),
+      // Controls
+      React.createElement("div", { style: { display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" } },
+        React.createElement(Btn, { onClick: handleUndo, disabled: history.length === 0, t }, "↩ Undo"),
+        React.createElement(Btn, { onClick: handleAddTube, t }, "+ Tube (+3)"),
+        React.createElement(Btn, { onClick: () => startGame(levelIdx), t }, "↺ Restart"),
         React.createElement(Btn, {
-          onClick: () => setTheme((t) => (t === 'light' ? 'dark' : 'light')),
-          accent: theme === 'dark',
-        }, theme === 'light' ? '🌙 Dark mode' : '☀️ Light mode'),
+          onClick: () => setTheme(th => th === "light" ? "dark" : "light"),
+          accent: theme === "dark", t,
+        }, theme === "light" ? "🌙 Dark" : "☀️ Light"),
       ),
 
-      // ── Win overlay ──
-      won && React.createElement(
-        "div",
-        {
-          style: {
-            position: "fixed", inset: 0,
-            background: "rgba(10,8,30,0.88)",
-            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-            backdropFilter: "blur(10px)",
-            zIndex: 200,
-            animation: "wsFadeIn 0.4s ease",
-          },
+      // Win overlay — always dark background so text is always white, regardless of page theme
+      won && React.createElement("div", {
+        style: {
+          position: "fixed", inset: 0, background: t.overlayBg,
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          backdropFilter: "blur(10px)", zIndex: 200, animation: "wsFadeIn 0.4s ease",
         },
-        React.createElement("style", null,
-          "@keyframes wsFadeIn { from { opacity:0; transform:scale(0.88) } to { opacity:1; transform:scale(1) } }"
-        ),
+      },
         React.createElement("div", { style: { fontSize: 64, marginBottom: 10 } }, "🎉"),
-        React.createElement("div", { style: { fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 6 } }, "Solved!"),
-        React.createElement("div", { style: { fontSize: 15, color: "rgba(255,255,255,0.5)", marginBottom: 32 } },
+        React.createElement("div", {
+          style: { fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 6, color: t.overlayText },
+        }, "Solved!"),
+        React.createElement("div", {
+          style: { fontSize: 15, color: t.overlayMuted, marginBottom: 6 },
+        },
           `${moves} move${moves !== 1 ? "s" : ""}` +
           (extraCount > 0 ? ` · ${extraCount} extra tube${extraCount > 1 ? "s" : ""} used` : "")
         ),
-        React.createElement(
-          "div",
-          { style: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" } },
-          React.createElement(Btn, { accent: true, onClick: () => startGame(levelIdx) }, "Play Again"),
+        // Best / new best callout
+        curStats && curStats.bestMoves === moves
+          ? React.createElement("div", { style: { fontSize: 14, color: "#C9B1FF", fontWeight: 700, marginBottom: 24 } }, "🏆 New best!")
+          : curStats && curStats.bestMoves
+          ? React.createElement("div", { style: { fontSize: 13, color: t.overlayMuted, marginBottom: 24 } },
+              `Best: ${curStats.bestMoves} moves`)
+          : React.createElement("div", { style: { marginBottom: 24 } }),
+
+        React.createElement("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" } },
+          React.createElement(Btn, { accent: true, overlay: true, onClick: () => startGame(levelIdx), t }, "Play Again"),
           levelIdx < LEVELS.length - 1 &&
-            React.createElement(Btn, { onClick: () => startGame(levelIdx + 1) }, "Next Level →")
+            React.createElement(Btn, { overlay: true, onClick: () => startGame(levelIdx + 1), t }, "Next Level →"),
+          React.createElement(Btn, { overlay: true, onClick: () => setShowStats(true), t }, "📊 Stats"),
         )
-      )
+      ),
+
+      // Stats panel
+      showStats && React.createElement(StatsPanel, { stats, t, onClose: () => setShowStats(false) })
     );
   }
 
