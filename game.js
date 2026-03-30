@@ -23,6 +23,11 @@
     { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"     },
     { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
     { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
+    // Extended palette for harder levels — chosen for hue distance from existing colours
+    { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"     }, // cyan-teal, distinct from teal/blue via lightness + stripes
+    { id: 14, base: "#6D4C41", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    }, // warm dark brown, distinct from brown via pattern
+    { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"  }, // deep rose, distinct from pink/red
+    { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"   }, // deep forest green, distinct from lime/mint
   ];
 
   function patternCSS(type, col) {
@@ -114,7 +119,7 @@
   // ---------------------------------------------------------------------------
   const TUBE_CAPACITY = 4;
 
-  function generatePuzzle(numColors) {
+  function generatePuzzle(numColors, spareTubes) {
     const all = [];
     for (let c = 0; c < numColors; c++)
       for (let i = 0; i < TUBE_CAPACITY; i++) all.push(c + 1);
@@ -125,7 +130,7 @@
     const tubes = [];
     for (let i = 0; i < numColors; i++)
       tubes.push(all.slice(i * TUBE_CAPACITY, (i + 1) * TUBE_CAPACITY));
-    tubes.push([]);
+    for (let i = 0; i < spareTubes; i++) tubes.push([]);
     return tubes;
   }
 
@@ -153,13 +158,17 @@
   // LEVELS
   // ---------------------------------------------------------------------------
   const LEVELS = [
-    { label: "Beginner",  colors: 2  },
-    { label: "Easy",      colors: 3  },
-    { label: "Medium",    colors: 5  },
-    { label: "Hard",      colors: 7  },
-    { label: "Expert",    colors: 8  },
-    { label: "Master",    colors: 10 },
-    { label: "Nightmare", colors: 12 },
+    { label: "Beginner",   colors: 2,  spareTubes: 2 },
+    { label: "Easy",       colors: 3,  spareTubes: 2 },
+    { label: "Medium",     colors: 5,  spareTubes: 2 },
+    { label: "Hard",       colors: 7,  spareTubes: 2 },
+    { label: "Expert",     colors: 8,  spareTubes: 2 },
+    { label: "Master",     colors: 10, spareTubes: 2 },
+    { label: "Nightmare",  colors: 12, spareTubes: 2 },
+    { label: "Insane",     colors: 13, spareTubes: 3 },
+    { label: "Brutal",     colors: 14, spareTubes: 3 },
+    { label: "Merciless",  colors: 15, spareTubes: 3 },
+    { label: "Impossible", colors: 16, spareTubes: 3 },
   ];
 
   // ---------------------------------------------------------------------------
@@ -357,7 +366,7 @@
     }, [theme]);
 
     const startGame = useCallback((idx) => {
-      setTubes(generatePuzzle(LEVELS[idx].colors));
+      setTubes(generatePuzzle(LEVELS[idx].colors, LEVELS[idx].spareTubes));
       setSelected(null);
       setMoves(0);
       setHistory([]);
