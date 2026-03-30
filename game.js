@@ -158,8 +158,8 @@
   // LEVELS
   // ---------------------------------------------------------------------------
   const LEVELS = [
-    { label: "Beginner",   colors: 2,  spareTubes: 2 },
-    { label: "Easy",       colors: 3,  spareTubes: 2 },
+    { label: "Beginner",   colors: 2,  spareTubes: 1 },
+    { label: "Easy",       colors: 3,  spareTubes: 1 },
     { label: "Medium",     colors: 5,  spareTubes: 2 },
     { label: "Hard",       colors: 7,  spareTubes: 2 },
     { label: "Expert",     colors: 8,  spareTubes: 2 },
