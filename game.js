@@ -23,11 +23,17 @@
     { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"     },
     { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
     { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
-    // Extended palette for harder levels — chosen for hue distance from existing colours
-    { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"     }, // cyan-teal, distinct from teal/blue via lightness + stripes
-    { id: 14, base: "#6D4C41", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    }, // warm dark brown, distinct from brown via pattern
-    { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"  }, // deep rose, distinct from pink/red
-    { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"   }, // deep forest green, distinct from lime/mint
+    { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"     },
+    { id: 14, base: "#6D4C41", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    },
+    { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"  },
+    { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"   },
+    // Extended palette for levels beyond Impossible
+    { id: 17, base: "#4A148C", pattern: "h-stripes",    patCol: "#2d0a5c", name: "violet"   }, // deep violet, distinct from purple via darkness + stripes
+    { id: 18, base: "#F57F17", pattern: "v-stripes",    patCol: "#b85a00", name: "amber"    }, // amber, distinct from orange/yellow via saturation + stripes
+    { id: 19, base: "#006064", pattern: "dots",         patCol: "#003d40", name: "petrol"   }, // very dark teal, distinct from teal/cyan via darkness + dots
+    { id: 20, base: "#880E4F", pattern: "none",         patCol: null,      name: "maroon"   }, // deep maroon, distinct from crimson/red via hue
+    { id: 21, base: "#1B5E20", pattern: "diag-stripes", patCol: "#0a3a10", name: "darkgreen" }, // very dark green, distinct from forest/lime
+    { id: 22, base: "#37474F", pattern: "h-stripes",    patCol: "#1c2b31", name: "slate"    }, // blue-grey slate, unique hue in palette
   ];
 
   function patternCSS(type, col) {
@@ -48,8 +54,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // THEME TOKENS — all colours derived from isDark flag.
-  // Every style in every component reads from here, never hardcoded.
+  // THEME TOKENS
   // ---------------------------------------------------------------------------
   function tok(isDark) {
     return {
@@ -80,7 +85,6 @@
       tubeBg:              isDark ? "rgba(255,255,255,0.05)"         : "rgba(255,255,255,0.60)",
       tubeRim:             isDark ? "rgba(255,255,255,0.18)"         : "rgba(15,28,63,0.25)",
       tubeRimSelected:     isDark ? "rgba(255,255,255,0.65)"         : "rgba(15,28,63,0.70)",
-      // Win overlay always dark so white text works regardless of page theme
       overlayBg:           "rgba(10,8,30,0.92)",
       overlayText:         "#ffffff",
       overlayMuted:        "rgba(255,255,255,0.58)",
@@ -158,17 +162,23 @@
   // LEVELS
   // ---------------------------------------------------------------------------
   const LEVELS = [
-    { label: "Beginner",   colors: 2,  spareTubes: 1 },
-    { label: "Easy",       colors: 3,  spareTubes: 1 },
-    { label: "Medium",     colors: 5,  spareTubes: 2 },
-    { label: "Hard",       colors: 7,  spareTubes: 2 },
-    { label: "Expert",     colors: 8,  spareTubes: 2 },
-    { label: "Master",     colors: 10, spareTubes: 2 },
-    { label: "Nightmare",  colors: 12, spareTubes: 2 },
-    { label: "Insane",     colors: 13, spareTubes: 3 },
-    { label: "Brutal",     colors: 14, spareTubes: 3 },
-    { label: "Merciless",  colors: 15, spareTubes: 3 },
-    { label: "Impossible", colors: 16, spareTubes: 3 },
+    { label: "Beginner",    colors: 2,  spareTubes: 1 },
+    { label: "Easy",        colors: 3,  spareTubes: 1 },
+    { label: "Medium",      colors: 5,  spareTubes: 2 },
+    { label: "Hard",        colors: 7,  spareTubes: 2 },
+    { label: "Expert",      colors: 8,  spareTubes: 2 },
+    { label: "Master",      colors: 10, spareTubes: 2 },
+    { label: "Nightmare",   colors: 12, spareTubes: 2 },
+    { label: "Insane",      colors: 13, spareTubes: 3 },
+    { label: "Brutal",      colors: 14, spareTubes: 3 },
+    { label: "Merciless",   colors: 15, spareTubes: 3 },
+    { label: "Impossible",  colors: 16, spareTubes: 3 },
+    { label: "Infernal",    colors: 17, spareTubes: 3 },
+    { label: "Diabolical",  colors: 18, spareTubes: 4 },
+    { label: "Catastrophic",colors: 19, spareTubes: 4 },
+    { label: "Cataclysmic", colors: 20, spareTubes: 4 },
+    { label: "Apocalyptic", colors: 21, spareTubes: 4 },
+    { label: "Extinction",  colors: 22, spareTubes: 4 },
   ];
 
   // ---------------------------------------------------------------------------
@@ -224,7 +234,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // BUTTON — theme-aware, with optional overlay variant for the win screen
+  // BUTTON
   // ---------------------------------------------------------------------------
   function Btn({ onClick, disabled, accent, overlay, children, t }) {
     const bg    = accent   ? "linear-gradient(135deg,#C9B1FF,#85C1E9)"
@@ -284,10 +294,9 @@
         }, "No games completed yet — start playing!"),
 
         hasAny && React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 2 } },
-          // Header
           React.createElement("div", {
             style: {
-              display: "grid", gridTemplateColumns: "110px 1fr 1fr 1fr 1fr",
+              display: "grid", gridTemplateColumns: "120px 1fr 1fr 1fr 1fr",
               gap: 8, fontSize: 11, fontWeight: 700, letterSpacing: "0.08em",
               textTransform: "uppercase", color: t.textMuted,
               paddingBottom: 8, borderBottom: `1px solid ${t.divider}`,
@@ -295,20 +304,19 @@
           },
             ["Level","Played","Won","Best","Avg"].map((h, i) =>
               React.createElement("div", {
-                key: h,
-                style: { textAlign: i === 0 ? "left" : "right" },
+                key: h, style: { textAlign: i === 0 ? "left" : "right" },
               }, h)
             )
           ),
           ...LEVELS.map(l => {
             const s = stats[l.label];
             if (!s || s.played === 0) return null;
-            const avg      = s.won > 0 ? Math.round(s.totalMoves / s.won) : "—";
-            const winRate  = Math.round((s.won / s.played) * 100);
+            const avg     = s.won > 0 ? Math.round(s.totalMoves / s.won) : "—";
+            const winRate = Math.round((s.won / s.played) * 100);
             return React.createElement("div", {
               key: l.label,
               style: {
-                display: "grid", gridTemplateColumns: "110px 1fr 1fr 1fr 1fr",
+                display: "grid", gridTemplateColumns: "120px 1fr 1fr 1fr 1fr",
                 gap: 8, fontSize: 14, alignItems: "center",
                 padding: "8px 0", borderBottom: `1px solid ${t.divider}`,
               },
@@ -335,28 +343,27 @@
   // MAIN APP
   // ---------------------------------------------------------------------------
   function App() {
-    const [theme,      setTheme]      = useState("light");
-    const [levelIdx,   setLevelIdx]   = useState(2);
-    const [tubes,      setTubes]      = useState([]);
-    const [selected,   setSelected]   = useState(null);
-    const [moves,      setMoves]      = useState(0);
-    const [history,    setHistory]    = useState([]);
-    const [won,        setWon]        = useState(false);
-    const [showLevels, setShowLevels] = useState(false);
-    const [extraCount, setExtraCount] = useState(0);
-    const [stats,      setStats]      = useState(loadStats);
-    const [showStats,  setShowStats]  = useState(false);
+    const [theme,        setTheme]        = useState("light");
+    const [levelIdx,     setLevelIdx]     = useState(2);
+    const [tubes,        setTubes]        = useState([]);
+    const [selected,     setSelected]     = useState(null);
+    const [moves,        setMoves]        = useState(0);
+    const [history,      setHistory]      = useState([]);
+    const [won,          setWon]          = useState(false);
+    const [wonDismissed, setWonDismissed] = useState(false); // overlay hidden but won still true
+    const [showLevels,   setShowLevels]   = useState(false);
+    const [extraCount,   setExtraCount]   = useState(0);
+    const [stats,        setStats]        = useState(loadStats);
+    const [showStats,    setShowStats]    = useState(false);
 
     const t = tok(theme === "dark");
 
-    // Read theme from URL on mount
     useEffect(() => {
       const p = new URLSearchParams(window.location.search);
       const u = p.get("theme");
       if (u === "dark" || u === "light") setTheme(u);
     }, []);
 
-    // Sync theme to URL + body
     useEffect(() => {
       const p = new URLSearchParams(window.location.search);
       p.set("theme", theme);
@@ -371,6 +378,7 @@
       setMoves(0);
       setHistory([]);
       setWon(false);
+      setWonDismissed(false);
       setLevelIdx(idx);
       setExtraCount(0);
       setShowLevels(false);
@@ -396,6 +404,7 @@
           if (isSolved(next)) {
             setTimeout(() => {
               setWon(true);
+              setWonDismissed(false);
               setStats(prev => {
                 const updated = recordWin(prev, LEVELS[levelIdx].label, newMoves);
                 saveStats(updated);
@@ -416,6 +425,7 @@
       setMoves(m => Math.max(0, m - 1));
       setSelected(null);
       setWon(false);
+      setWonDismissed(false);
     }
 
     function handleAddTube() {
@@ -425,10 +435,15 @@
       setMoves(m => m + 3);
     }
 
-    const numTubes   = tubes.length;
-    const perRow     = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
-    const extraStart = tubes.length - extraCount;
-    const curStats   = stats[LEVELS[levelIdx].label];
+    function dismissWinOverlay() {
+      setWonDismissed(true);
+    }
+
+    const numTubes        = tubes.length;
+    const perRow          = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
+    const extraStart      = tubes.length - extraCount;
+    const curStats        = stats[LEVELS[levelIdx].label];
+    const showWinOverlay  = won && !wonDismissed;
 
     return React.createElement("div", {
       style: {
@@ -520,43 +535,72 @@
         React.createElement(Btn, { onClick: handleUndo, disabled: history.length === 0, t }, "↩ Undo"),
         React.createElement(Btn, { onClick: handleAddTube, t }, "+ Tube (+3)"),
         React.createElement(Btn, { onClick: () => startGame(levelIdx), t }, "↺ Restart"),
+        // Re-show overlay if won and dismissed
+        won && wonDismissed &&
+          React.createElement(Btn, { onClick: () => setWonDismissed(false), t }, "🎉 Results"),
         React.createElement(Btn, {
           onClick: () => setTheme(th => th === "light" ? "dark" : "light"),
           accent: theme === "dark", t,
         }, theme === "light" ? "🌙 Dark" : "☀️ Light"),
       ),
 
-      // Win overlay — always dark background so text is always white, regardless of page theme
-      won && React.createElement("div", {
+      // Win overlay
+      showWinOverlay && React.createElement("div", {
+        onClick: dismissWinOverlay, // click backdrop to dismiss
         style: {
           position: "fixed", inset: 0, background: t.overlayBg,
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
           backdropFilter: "blur(10px)", zIndex: 200, animation: "wsFadeIn 0.4s ease",
+          cursor: "pointer",
         },
       },
-        React.createElement("div", { style: { fontSize: 64, marginBottom: 10 } }, "🎉"),
+        // Inner card — stop clicks here from bubbling to backdrop
         React.createElement("div", {
-          style: { fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 6, color: t.overlayText },
-        }, "Solved!"),
-        React.createElement("div", {
-          style: { fontSize: 15, color: t.overlayMuted, marginBottom: 6 },
+          onClick: e => e.stopPropagation(),
+          style: { display: "flex", flexDirection: "column", alignItems: "center", cursor: "default", position: "relative" },
         },
-          `${moves} move${moves !== 1 ? "s" : ""}` +
-          (extraCount > 0 ? ` · ${extraCount} extra tube${extraCount > 1 ? "s" : ""} used` : "")
-        ),
-        // Best / new best callout
-        curStats && curStats.bestMoves === moves
-          ? React.createElement("div", { style: { fontSize: 14, color: "#C9B1FF", fontWeight: 700, marginBottom: 24 } }, "🏆 New best!")
-          : curStats && curStats.bestMoves
-          ? React.createElement("div", { style: { fontSize: 13, color: t.overlayMuted, marginBottom: 24 } },
-              `Best: ${curStats.bestMoves} moves`)
-          : React.createElement("div", { style: { marginBottom: 24 } }),
+          // × close button top-right
+          React.createElement("button", {
+            onClick: dismissWinOverlay,
+            style: {
+              position: "absolute", top: -48, right: -16,
+              background: "rgba(255,255,255,0.12)", border: "1.5px solid rgba(255,255,255,0.25)",
+              borderRadius: "50%", width: 36, height: 36,
+              color: "#fff", fontSize: 18, fontWeight: 700,
+              cursor: "pointer", lineHeight: "1", display: "flex", alignItems: "center", justifyContent: "center",
+            },
+          }, "×"),
 
-        React.createElement("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" } },
-          React.createElement(Btn, { accent: true, overlay: true, onClick: () => startGame(levelIdx), t }, "Play Again"),
-          levelIdx < LEVELS.length - 1 &&
-            React.createElement(Btn, { overlay: true, onClick: () => startGame(levelIdx + 1), t }, "Next Level →"),
-          React.createElement(Btn, { overlay: true, onClick: () => setShowStats(true), t }, "📊 Stats"),
+          React.createElement("div", { style: { fontSize: 64, marginBottom: 10 } }, "🎉"),
+          React.createElement("div", {
+            style: { fontSize: 36, fontWeight: 900, letterSpacing: "-0.02em", marginBottom: 6, color: t.overlayText },
+          }, "Solved!"),
+          React.createElement("div", {
+            style: { fontSize: 15, color: t.overlayMuted, marginBottom: 6 },
+          },
+            `${moves} move${moves !== 1 ? "s" : ""}` +
+            (extraCount > 0 ? ` · ${extraCount} extra tube${extraCount > 1 ? "s" : ""} used` : "")
+          ),
+
+          // Best / new best
+          curStats && curStats.bestMoves === moves
+            ? React.createElement("div", { style: { fontSize: 14, color: "#C9B1FF", fontWeight: 700, marginBottom: 24 } }, "🏆 New best!")
+            : curStats && curStats.bestMoves
+            ? React.createElement("div", { style: { fontSize: 13, color: t.overlayMuted, marginBottom: 24 } },
+                `Best: ${curStats.bestMoves} moves`)
+            : React.createElement("div", { style: { marginBottom: 24 } }),
+
+          React.createElement("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" } },
+            React.createElement(Btn, { accent: true, overlay: true, onClick: () => startGame(levelIdx), t }, "Play Again"),
+            levelIdx < LEVELS.length - 1 &&
+              React.createElement(Btn, { overlay: true, onClick: () => startGame(levelIdx + 1), t }, "Next Level →"),
+            React.createElement(Btn, { overlay: true, onClick: dismissWinOverlay, t }, "See board"),
+            React.createElement(Btn, { overlay: true, onClick: () => { setShowStats(true); }, t }, "📊 Stats"),
+          ),
+
+          React.createElement("div", {
+            style: { marginTop: 18, fontSize: 12, color: "rgba(255,255,255,0.35)", cursor: "default" },
+          }, "click outside or × to dismiss")
         )
       ),
 
