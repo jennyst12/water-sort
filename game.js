@@ -34,6 +34,9 @@
     { id: 20, base: "#880E4F", pattern: "none",         patCol: null,      name: "maroon"   }, // deep maroon, distinct from crimson/red via hue
     { id: 21, base: "#1B5E20", pattern: "diag-stripes", patCol: "#0a3a10", name: "darkgreen" }, // very dark green, distinct from forest/lime
     { id: 22, base: "#37474F", pattern: "h-stripes",    patCol: "#1c2b31", name: "slate"    }, // blue-grey slate, unique hue in palette
+    { id: 23, base: "#ff33ff", pattern: "h-stripes",    patCol: "#7C4DFF", name: "lilac"    },
+    { id: 24, base: "#AEC6CF", pattern: "h-stripes",    patCol: "#1c2b31", name: "sky"    },
+    { id: 25, base: "#ffb7c5", pattern: "h-stripes",    patCol: "#1c2b31", name: "babypink"    },
   ];
 
   function patternCSS(type, col) {
@@ -179,6 +182,9 @@
     { label: "Cataclysmic", colors: 20, spareTubes: 4 },
     { label: "Apocalyptic", colors: 21, spareTubes: 4 },
     { label: "Extinction",  colors: 22, spareTubes: 4 },
+    { label: "Dreadful",    colors: 23, spareTubes: 4 },
+    { label: "Excruciating",colors: 24, spareTubes: 4 },
+    { label: "Extra-Hard",  colors: 25, spareTubes: 4 },
   ];
 
   // ---------------------------------------------------------------------------
