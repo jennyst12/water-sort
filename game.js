@@ -24,7 +24,7 @@
     { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
     { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
     { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"     },
-    { id: 14, base: "#6D4C41", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    },
+    { id: 14, base: "#fff994", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    },
     { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"  },
     { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"   },
     // Extended palette for levels beyond Impossible
@@ -34,8 +34,8 @@
     { id: 20, base: "#880E4F", pattern: "none",         patCol: null,      name: "maroon"   }, // deep maroon, distinct from crimson/red via hue
     { id: 21, base: "#1B5E20", pattern: "diag-stripes", patCol: "#0a3a10", name: "darkgreen" }, // very dark green, distinct from forest/lime
     { id: 22, base: "#37474F", pattern: "h-stripes",    patCol: "#1c2b31", name: "slate"    }, // blue-grey slate, unique hue in palette
-    { id: 23, base: "#ff33ff", pattern: "h-stripes",    patCol: "#7C4DFF", name: "lilac"    },
-    { id: 24, base: "#AEC6CF", pattern: "h-stripes",    patCol: "#1c2b31", name: "sky"    },
+    { id: 23, base: "#efcaff", pattern: "h-stripes",    patCol: "#7C4DFF", name: "lilac"    },
+    { id: 24, base: "#cbf0ff", pattern: "h-stripes",    patCol: "#1c2b31", name: "sky"    },
     { id: 25, base: "#ffb7c5", pattern: "h-stripes",    patCol: "#1c2b31", name: "babypink"    },
   ];
 
