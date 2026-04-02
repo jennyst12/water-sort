@@ -19,7 +19,7 @@
     { id: 6,  base: "#E91E8C", pattern: "dots",         patCol: "#b8166e", name: "pink"     },
     { id: 7,  base: "#2196F3", pattern: "v-stripes",    patCol: "#1565c0", name: "blue"     },
     { id: 8,  base: "#F4511E", pattern: "diag-stripes", patCol: "#bf3c12", name: "orange"   },
-    { id: 9,  base: "#1A237E", pattern: "h-stripes",    patCol: "#0d1554", name: "navy"     },
+    { id: 9,  base: "#1A237E", pattern: "h-stripes",    patCol: "#aab1e8", name: "navy"     },
     { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"     },
     { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
     { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
