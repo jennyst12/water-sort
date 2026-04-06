@@ -11,32 +11,31 @@
   // COLOUR PALETTE
   // ---------------------------------------------------------------------------
   const COLORS = [
-    { id: 1,  base: "#D93025", pattern: "none",         patCol: null,      name: "red"      },
-    { id: 2,  base: "#007A6E", pattern: "h-stripes",    patCol: "#005a52", name: "teal"     },
-    { id: 3,  base: "#F5C400", pattern: "dots",         patCol: "#c49800", name: "yellow"   },
-    { id: 4,  base: "#52C99A", pattern: "diag-stripes", patCol: "#3aab80", name: "mint"     },
-    { id: 5,  base: "#7C4DFF", pattern: "none",         patCol: null,      name: "purple"   },
-    { id: 6,  base: "#E91E8C", pattern: "dots",         patCol: "#b8166e", name: "pink"     },
-    { id: 7,  base: "#2196F3", pattern: "v-stripes",    patCol: "#1565c0", name: "blue"     },
-    { id: 8,  base: "#F4511E", pattern: "diag-stripes", patCol: "#bf3c12", name: "orange"   },
-    { id: 9,  base: "#1A237E", pattern: "h-stripes",    patCol: "#aab1e8", name: "navy"     },
-    { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"     },
-    { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"    },
-    { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"     },
-    { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"     },
-    { id: 14, base: "#fff994", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"    },
-    { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"  },
-    { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"   },
-    // Extended palette for levels beyond Impossible
-    { id: 17, base: "#4A148C", pattern: "h-stripes",    patCol: "#2d0a5c", name: "violet"   }, // deep violet, distinct from purple via darkness + stripes
-    { id: 18, base: "#F57F17", pattern: "v-stripes",    patCol: "#b85a00", name: "amber"    }, // amber, distinct from orange/yellow via saturation + stripes
-    { id: 19, base: "#006064", pattern: "dots",         patCol: "#003d40", name: "petrol"   }, // very dark teal, distinct from teal/cyan via darkness + dots
-    { id: 20, base: "#880E4F", pattern: "none",         patCol: null,      name: "maroon"   }, // deep maroon, distinct from crimson/red via hue
-    { id: 21, base: "#1B5E20", pattern: "diag-stripes", patCol: "#0a3a10", name: "darkgreen" }, // very dark green, distinct from forest/lime
-    { id: 22, base: "#37474F", pattern: "h-stripes",    patCol: "#1c2b31", name: "slate"    }, // blue-grey slate, unique hue in palette
-    { id: 23, base: "#efcaff", pattern: "h-stripes",    patCol: "#7C4DFF", name: "lilac"    },
-    { id: 24, base: "#cbf0ff", pattern: "h-stripes",    patCol: "#1c2b31", name: "sky"    },
-    { id: 25, base: "#ffb7c5", pattern: "h-stripes",    patCol: "#1c2b31", name: "babypink"    },
+    { id: 1,  base: "#D93025", pattern: "none",         patCol: null,      name: "red"       },
+    { id: 2,  base: "#007A6E", pattern: "h-stripes",    patCol: "#005a52", name: "teal"      },
+    { id: 3,  base: "#F5C400", pattern: "dots",         patCol: "#c49800", name: "yellow"    },
+    { id: 4,  base: "#52C99A", pattern: "diag-stripes", patCol: "#3aab80", name: "mint"      },
+    { id: 5,  base: "#7C4DFF", pattern: "none",         patCol: null,      name: "purple"    },
+    { id: 6,  base: "#E91E8C", pattern: "dots",         patCol: "#b8166e", name: "pink"      },
+    { id: 7,  base: "#2196F3", pattern: "v-stripes",    patCol: "#1565c0", name: "blue"      },
+    { id: 8,  base: "#F4511E", pattern: "diag-stripes", patCol: "#bf3c12", name: "orange"    },
+    { id: 9,  base: "#1A237E", pattern: "h-stripes",    patCol: "#aab1e8", name: "navy"      },
+    { id: 10, base: "#76BC21", pattern: "v-stripes",    patCol: "#558c16", name: "lime"      },
+    { id: 11, base: "#8B4513", pattern: "dots",         patCol: "#5c2d0a", name: "brown"     },
+    { id: 12, base: "#BF360C", pattern: "h-stripes",    patCol: "#8a2508", name: "rust"      },
+    { id: 13, base: "#00838F", pattern: "diag-stripes", patCol: "#005f6a", name: "cyan"      },
+    { id: 14, base: "#fff994", pattern: "v-stripes",    patCol: "#4a322b", name: "mocha"     },
+    { id: 15, base: "#AD1457", pattern: "diag-stripes", patCol: "#7c0d3d", name: "crimson"   },
+    { id: 16, base: "#33691E", pattern: "dots",         patCol: "#1e3d10", name: "forest"    },
+    { id: 17, base: "#4A148C", pattern: "h-stripes",    patCol: "#2d0a5c", name: "violet"    },
+    { id: 18, base: "#F57F17", pattern: "v-stripes",    patCol: "#b85a00", name: "amber"     },
+    { id: 19, base: "#006064", pattern: "dots",         patCol: "#003d40", name: "petrol"    },
+    { id: 20, base: "#880E4F", pattern: "none",         patCol: null,      name: "maroon"    },
+    { id: 21, base: "#1B5E20", pattern: "diag-stripes", patCol: "#0a3a10", name: "darkgreen" },
+    { id: 22, base: "#37474F", pattern: "h-stripes",    patCol: "#1c2b31", name: "slate"     },
+    { id: 23, base: "#efcaff", pattern: "h-stripes",    patCol: "#7C4DFF", name: "lilac"     },
+    { id: 24, base: "#cbf0ff", pattern: "h-stripes",    patCol: "#1c2b31", name: "sky"       },
+    { id: 25, base: "#ffb7c5", pattern: "h-stripes",    patCol: "#1c2b31", name: "babypink"  },
   ];
 
   function patternCSS(type, col) {
@@ -126,6 +125,10 @@
   // ---------------------------------------------------------------------------
   const TUBE_CAPACITY = 4;
 
+  function isTubeComplete(tube) {
+    return tube.length === TUBE_CAPACITY && tube.every(c => c === tube[0]);
+  }
+
   function generatePuzzle(numColors, spareTubes) {
     const all = [];
     for (let c = 0; c < numColors; c++)
@@ -142,7 +145,7 @@
   }
 
   function isSolved(tubes) {
-    return tubes.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && t.every(c => c === t[0])));
+    return tubes.every(t => t.length === 0 || isTubeComplete(t));
   }
 
   function canPour(from, to) {
@@ -190,27 +193,66 @@
   // ---------------------------------------------------------------------------
   // TUBE COMPONENT
   // ---------------------------------------------------------------------------
-  function Tube({ contents, isSelected, isExtra, onClick, t }) {
+  function Tube({ contents, isSelected, isExtra, isComplete, justCompleted, onClick, t }) {
     const filled   = [...contents].reverse();
     const segments = Array(TUBE_CAPACITY - filled.length).fill(null).concat(filled);
+
+    // Colour of the completed tube's liquid, for the border + cap tint
+    const completedColor = isComplete
+      ? (COLORS.find(c => c.id === contents[0]) || null)
+      : null;
+
+    // Border: completed > selected > extra > normal
+    let border, boxShadow;
+    if (isComplete) {
+      const col = completedColor ? completedColor.base : "#fff";
+      border    = `3px solid ${col}`;
+      boxShadow = `0 0 12px ${col}88, inset 0 0 6px ${col}22`;
+    } else if (isSelected) {
+      border    = `2.5px solid ${t.tubeSelectedBorder}`;
+      boxShadow = t.tubeSelectedGlow;
+    } else if (isExtra) {
+      border    = `2.5px dashed ${t.tubeExtraBorder}`;
+      boxShadow = t.tubeInnerShadow;
+    } else {
+      border    = `2.5px solid ${t.tubeBorder}`;
+      boxShadow = t.tubeInnerShadow;
+    }
 
     return React.createElement("div", {
       onClick,
       style: {
-        display: "flex", flexDirection: "column", alignItems: "center", cursor: "pointer",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        cursor: isComplete ? "default" : "pointer",
         transform: isSelected ? "translateY(-16px) scale(1.06)" : "translateY(0) scale(1)",
         transition: "transform 0.18s cubic-bezier(.34,1.56,.64,1)",
+        animation: justCompleted ? "wsTubeComplete 0.5s ease" : "none",
       },
     },
+      // Cap — visible only when complete; sits on top of the tube body
+      React.createElement("div", {
+        style: {
+          width: 44,
+          height: isComplete ? 10 : 0,
+          borderRadius: "6px 6px 0 0",
+          background: completedColor
+            ? `linear-gradient(180deg, ${completedColor.base} 0%, ${completedColor.base}cc 100%)`
+            : "transparent",
+          boxShadow: completedColor ? `0 -2px 6px ${completedColor.base}66` : "none",
+          overflow: "hidden",
+          transition: "height 0.2s ease",
+          flexShrink: 0,
+        },
+      }),
+
+      // Tube body
       React.createElement("div", {
         style: {
           width: 52, height: 160, borderRadius: "0 0 28px 28px",
-          border: isSelected ? `2.5px solid ${t.tubeSelectedBorder}`
-                : isExtra    ? `2.5px dashed ${t.tubeExtraBorder}`
-                :               `2.5px solid ${t.tubeBorder}`,
-          boxShadow: isSelected ? t.tubeSelectedGlow : t.tubeInnerShadow,
+          border, boxShadow,
           background: t.tubeBg,
           overflow: "hidden", display: "flex", flexDirection: "column", position: "relative",
+          transition: "border 0.15s, box-shadow 0.15s",
         },
       },
         segments.map((colorId, i) => {
@@ -229,10 +271,14 @@
           });
         })
       ),
+
+      // Bottom rim
       React.createElement("div", {
         style: {
           width: 36, height: 6, borderRadius: "0 0 10px 10px",
-          background: isSelected ? t.tubeRimSelected : t.tubeRim,
+          background: isComplete
+            ? (completedColor ? completedColor.base : t.tubeRimSelected)
+            : isSelected ? t.tubeRimSelected : t.tubeRim,
           marginTop: -1, transition: "background 0.18s",
         },
       })
@@ -356,11 +402,13 @@
     const [moves,        setMoves]        = useState(0);
     const [history,      setHistory]      = useState([]);
     const [won,          setWon]          = useState(false);
-    const [wonDismissed, setWonDismissed] = useState(false); // overlay hidden but won still true
+    const [wonDismissed, setWonDismissed] = useState(false);
     const [showLevels,   setShowLevels]   = useState(false);
     const [extraCount,   setExtraCount]   = useState(0);
     const [stats,        setStats]        = useState(loadStats);
     const [showStats,    setShowStats]    = useState(false);
+    // Set of tube indices that just completed (cleared after animation)
+    const [justCompleted, setJustCompleted] = useState(new Set());
 
     const t = tok(theme === "dark");
 
@@ -388,12 +436,15 @@
       setLevelIdx(idx);
       setExtraCount(0);
       setShowLevels(false);
+      setJustCompleted(new Set());
     }, []);
 
     useEffect(() => { startGame(2); }, []);
 
     function handleTubeClick(idx) {
       if (won) return;
+      // Completed tubes can't be selected or poured into/from
+      if (isTubeComplete(tubes[idx]) && selected === null) return;
       if (selected === null) {
         if (tubes[idx].length === 0) return;
         setSelected(idx);
@@ -407,6 +458,19 @@
           const newMoves = moves + 1;
           setMoves(newMoves);
           setSelected(null);
+
+          // Check which tubes newly became complete
+          const newlyDone = new Set();
+          next.forEach((tube, i) => {
+            if (isTubeComplete(tube) && !isTubeComplete(tubes[i])) {
+              newlyDone.add(i);
+            }
+          });
+          if (newlyDone.size > 0) {
+            setJustCompleted(newlyDone);
+            setTimeout(() => setJustCompleted(new Set()), 600);
+          }
+
           if (isSolved(next)) {
             setTimeout(() => {
               setWon(true);
@@ -432,6 +496,7 @@
       setSelected(null);
       setWon(false);
       setWonDismissed(false);
+      setJustCompleted(new Set());
     }
 
     function handleAddTube() {
@@ -445,11 +510,11 @@
       setWonDismissed(true);
     }
 
-    const numTubes        = tubes.length;
-    const perRow          = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
-    const extraStart      = tubes.length - extraCount;
-    const curStats        = stats[LEVELS[levelIdx].label];
-    const showWinOverlay  = won && !wonDismissed;
+    const numTubes       = tubes.length;
+    const perRow         = numTubes <= 6 ? numTubes : numTubes <= 10 ? 5 : 6;
+    const extraStart     = tubes.length - extraCount;
+    const curStats       = stats[LEVELS[levelIdx].label];
+    const showWinOverlay = won && !wonDismissed;
 
     return React.createElement("div", {
       style: {
@@ -460,9 +525,18 @@
         backdropFilter: theme === "light" ? "blur(4px)" : "none",
       },
     },
-      React.createElement("style", null,
-        "@keyframes wsFadeIn{from{opacity:0;transform:scale(0.88)}to{opacity:1;transform:scale(1)}}"
-      ),
+      React.createElement("style", null, `
+        @keyframes wsFadeIn {
+          from { opacity: 0; transform: scale(0.88); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        @keyframes wsTubeComplete {
+          0%   { transform: scale(1); }
+          30%  { transform: scale(1.12) translateY(-6px); }
+          60%  { transform: scale(0.97) translateY(0px); }
+          100% { transform: scale(1); }
+        }
+      `),
 
       // Title
       React.createElement("div", { style: { textAlign: "center", marginBottom: 22 } },
@@ -528,9 +602,11 @@
         tubes.map((tube, i) =>
           React.createElement(Tube, {
             key: i, contents: tube,
-            isSelected: selected === i,
-            isExtra: i >= extraStart,
-            onClick: () => handleTubeClick(i),
+            isSelected:    selected === i,
+            isExtra:       i >= extraStart,
+            isComplete:    isTubeComplete(tube),
+            justCompleted: justCompleted.has(i),
+            onClick:       () => handleTubeClick(i),
             t,
           })
         )
@@ -541,7 +617,6 @@
         React.createElement(Btn, { onClick: handleUndo, disabled: history.length === 0, t }, "↩ Undo"),
         React.createElement(Btn, { onClick: handleAddTube, t }, "+ Tube (+3)"),
         React.createElement(Btn, { onClick: () => startGame(levelIdx), t }, "↺ Restart"),
-        // Re-show overlay if won and dismissed
         won && wonDismissed &&
           React.createElement(Btn, { onClick: () => setWonDismissed(false), t }, "🎉 Results"),
         React.createElement(Btn, {
@@ -552,7 +627,7 @@
 
       // Win overlay
       showWinOverlay && React.createElement("div", {
-        onClick: dismissWinOverlay, // click backdrop to dismiss
+        onClick: dismissWinOverlay,
         style: {
           position: "fixed", inset: 0, background: t.overlayBg,
           display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
@@ -560,12 +635,10 @@
           cursor: "pointer",
         },
       },
-        // Inner card — stop clicks here from bubbling to backdrop
         React.createElement("div", {
           onClick: e => e.stopPropagation(),
           style: { display: "flex", flexDirection: "column", alignItems: "center", cursor: "default", position: "relative" },
         },
-          // × close button top-right
           React.createElement("button", {
             onClick: dismissWinOverlay,
             style: {
@@ -573,7 +646,7 @@
               background: "rgba(255,255,255,0.12)", border: "1.5px solid rgba(255,255,255,0.25)",
               borderRadius: "50%", width: 36, height: 36,
               color: "#fff", fontSize: 18, fontWeight: 700,
-              cursor: "pointer", lineHeight: "1", display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
             },
           }, "×"),
 
@@ -588,7 +661,6 @@
             (extraCount > 0 ? ` · ${extraCount} extra tube${extraCount > 1 ? "s" : ""} used` : "")
           ),
 
-          // Best / new best
           curStats && curStats.bestMoves === moves
             ? React.createElement("div", { style: { fontSize: 14, color: "#C9B1FF", fontWeight: 700, marginBottom: 24 } }, "🏆 New best!")
             : curStats && curStats.bestMoves
@@ -601,11 +673,11 @@
             levelIdx < LEVELS.length - 1 &&
               React.createElement(Btn, { overlay: true, onClick: () => startGame(levelIdx + 1), t }, "Next Level →"),
             React.createElement(Btn, { overlay: true, onClick: dismissWinOverlay, t }, "See board"),
-            React.createElement(Btn, { overlay: true, onClick: () => { setShowStats(true); }, t }, "📊 Stats"),
+            React.createElement(Btn, { overlay: true, onClick: () => setShowStats(true), t }, "📊 Stats"),
           ),
 
           React.createElement("div", {
-            style: { marginTop: 18, fontSize: 12, color: "rgba(255,255,255,0.35)", cursor: "default" },
+            style: { marginTop: 18, fontSize: 12, color: "rgba(255,255,255,0.35)" },
           }, "click outside or × to dismiss")
         )
       ),
