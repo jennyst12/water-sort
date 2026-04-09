@@ -38,6 +38,10 @@
     { id: 25, base: "#ffb7c5", pattern: "h-stripes",    patCol: "#1c2b31", name: "babypink"  },
   ];
 
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+  }
+
   function patternCSS(type, col) {
     if (!type || type === "none" || !col) return "";
     const enc = encodeURIComponent;
