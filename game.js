@@ -227,11 +227,14 @@
         transform: isSelected ? "translateY(-16px) scale(1.06)" : "translateY(0) scale(1)",
         transition: "transform 0.18s cubic-bezier(.34,1.56,.64,1)",
         animation: justCompleted ? "wsTubeComplete 0.5s ease" : "none",
+        position: "relative",
       },
     },
-      // Cap — visible only when complete; sits on top of the tube body
+      // Cap — visible only when complete; positioned absolutely above tube body so it doesn't affect layout height
       React.createElement("div", {
         style: {
+          position: "absolute",
+          bottom: "100%",
           width: 44,
           height: isComplete ? 10 : 0,
           borderRadius: "6px 6px 0 0",
@@ -241,7 +244,6 @@
           boxShadow: completedColor ? `0 -2px 6px ${completedColor.base}66` : "none",
           overflow: "hidden",
           transition: "height 0.2s ease",
-          flexShrink: 0,
         },
       }),
 
